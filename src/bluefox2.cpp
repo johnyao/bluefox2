@@ -329,22 +329,31 @@ void Bluefox2::SetMM(int mm) const {
 
 void Bluefox2::SetMaster() const {
   // Prefer on demand if it's available
-  if (IsCtmOnDemandSupported()) {
-    cam_set_->triggerMode.write(ctmOnDemand);
-  } else {
-    cam_set_->triggerMode.write(ctmContinuous);
-  }
-  cam_set_->flashMode.write(cfmDigout0);
-  cam_set_->flashType.write(cftStandard);
+  //if (IsCtmOnDemandSupported()) {
+  //cam_set_->triggerMode.write(ctmOnDemand);
+  cam_set_->triggerMode.write(ctmOnHighLevel);
+  //} else {
+  //  cam_set_->triggerMode.write(ctmContinuous);
+  //}
+  cam_set_->triggerSource.write(ctsDigIn0);
+  //cam_set_->flashMode.write(cfmDigout0);
+  auto val = cam_set_->flashMode.read();
+	std::cout << "Flash mode" << val;
+  //cam_set_->flashType.write(cftStandard);
+  val = cam_set_->flashMode.read();
+
   cam_set_->flashToExposeDelay_us.write(0);
+  val = cam_set_->flashMode.read();
+
   std::cout << serial() << ": master" << std::endl;
 }
 
 void Bluefox2::SetSlave() const {
   cam_set_->triggerMode.write(ctmOnHighLevel);
+  auto val = cam_set_->triggerMode.read();
+	std::cout << "Trigger mode : " << val << std::endl;
   cam_set_->triggerSource.write(ctsDigIn0);
   cam_set_->frameDelay_us.write(0);
   std::cout << serial() << ": slave" << std::endl;
 }
-
 }  // namespace bluefox2
