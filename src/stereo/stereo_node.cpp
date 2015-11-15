@@ -40,8 +40,8 @@ void StereoNode::Setup(Bluefox2DynConfig &config) {
   auto config_cpy = config;
   left_ros_->camera().Configure(config_cpy);
   right_ros_->camera().Configure(config);
-  left_ros_->camera().SetMaster();
-  right_ros_->camera().SetSlave();
+  left_ros_->camera().SetHwTrig();
+  right_ros_->camera().SetHwTrig();
 }
 
 }  // namepace bluefox2

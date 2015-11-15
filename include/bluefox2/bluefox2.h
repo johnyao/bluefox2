@@ -28,6 +28,7 @@ class Bluefox2 {
   void SetMM(int mm) const;
   void SetMaster() const;
   void SetSlave() const;
+  void SetHwTrig() const;
 
  private:
   std::string AvailableDevice() const;
