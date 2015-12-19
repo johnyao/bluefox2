@@ -21,6 +21,7 @@ generate_messages(DEPENDENCIES std_msgs)
 catkin_package(
     INCLUDE_DIRS include ${mvIMPACT_INCLUDE_DIRS}
     LIBRARIES ${PROJECT_NAME} ${mvIMPACT_LIBRARIES}
+    DEPENDS camera_base
     CATKIN_DEPENDS message_runtime
     )
 
