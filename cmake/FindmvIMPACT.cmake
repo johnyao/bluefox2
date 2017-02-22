@@ -71,8 +71,8 @@ list(APPEND mvIMPACT_CHECK_INCLUDE_DIRS
     )
 execute_process(COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCH)
 list(APPEND mvIMPACT_CHECK_LIBRARY_DIRS
-    /opt/mvIMPACT_acquire/lib/${ARCH}
-    ${BLUEFOX2_DIR}/mvIMPACT/lib/${ARCH}
+    /opt/mvIMPACT_acquire/lib/arm64
+    ${BLUEFOX2_DIR}/mvIMPACT/lib/arm64
     )
 
 # Check general hints
