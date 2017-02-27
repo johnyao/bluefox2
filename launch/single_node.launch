@@ -1,7 +1,8 @@
 <launch>
     <!-- Common Interface -->
     <arg name="device"/>
-    <arg name="rate" default="20"/>
+    <arg name="rate" default="25"/>
+    <arg name="timeout" default="100"/> <!-- This sometimes unexpectedly affects imageRequestWaitFor-->
 
     <!-- Camera Settings -->
     <arg name="serial" default="$(arg device)"/>
@@ -50,6 +51,7 @@
         <param name="wbp" type="int" value="$(arg wbp)"/>
         <param name="request" type="int" value="$(arg request)"/>
         <param name="mm" type="int" value="$(arg mm)"/>
+        <param name="timeout" type="int" value="$(arg timeout)"/>
         <param name="image_raw/compressed/jpeg_quality" type="int" value="$(arg jpeg_quality)"/>
     </node>
 

@@ -22,6 +22,9 @@ Bluefox2Ros::Bluefox2Ros(const ros::NodeHandle& nh, const std::string& prefix)
   int mm;
   cnh.param<int>("mm", mm, 0);
   bluefox2_.SetMM(mm);
+
+  cnh.param<int>("timeout", mm, 0);
+  bluefox2_.SetTimeout(mm);
 }
 
 bool Bluefox2Ros::Grab(const sensor_msgs::ImagePtr& image_msg, const sensor_msgs::CameraInfoPtr& cinfo_msgs) {

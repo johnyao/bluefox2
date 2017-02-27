@@ -29,6 +29,7 @@ class Bluefox2 {
   void SetMaster() const;
   void SetSlave() const;
   void SetHwTrig() const;
+  void SetTimeout(int ts) { timeout_ms_ = ts; }
 
  private:
   std::string AvailableDevice() const;
@@ -55,7 +56,7 @@ class Bluefox2 {
   void FillCaptureQueue(int &n) const;
   void RequestImages(int n) const;
 
-  int timeout_ms_{200};
+  int timeout_ms_;
   std::string serial_;
   Bluefox2DynConfig config_;
   mvIMPACT::acquire::Request *request_{nullptr};
