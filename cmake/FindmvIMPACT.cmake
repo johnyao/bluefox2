@@ -70,9 +70,12 @@ list(APPEND mvIMPACT_CHECK_INCLUDE_DIRS
     ${BLUEFOX2_DIR}/mvIMPACT/include
     )
 execute_process(COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCH)
+if(ARCH STREQUAL "aarch64")
+  set(ARCH "arm64")
+endif(ARCH STREQUAL "aarch64")
 list(APPEND mvIMPACT_CHECK_LIBRARY_DIRS
-    /opt/mvIMPACT_acquire/lib/arm64
-    ${BLUEFOX2_DIR}/mvIMPACT/lib/arm64
+    /opt/mvIMPACT_acquire/lib/${ARCH}
+    ${BLUEFOX2_DIR}/mvIMPACT/lib/${ARCH}
     )
 
 # Check general hints
