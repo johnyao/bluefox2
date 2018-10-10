@@ -112,6 +112,8 @@ namespace bluefox2 {
                            request_->imageLinePitch.read(),
                            request_->imageData.read());
 
+    image_msg.header.seq = request_->infoFrameNr.read();
+
     // Release capture request
     fi_->imageRequestUnlock(request_nr);
     return true;
