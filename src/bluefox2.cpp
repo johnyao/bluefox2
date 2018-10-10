@@ -52,6 +52,14 @@ namespace bluefox2 {
     }
   }
 
+  int Bluefox2::GetExposeStartUs() const {
+    if (request_ && request_->isOK()) {
+      return request_->infoExposeStart_us.read();
+    } else {
+      return -1;
+    }
+  }
+
   void Bluefox2::RequestSingle() const {
     int result = DMR_NO_ERROR;
     result = fi_->imageRequestSingle();

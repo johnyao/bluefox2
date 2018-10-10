@@ -19,6 +19,7 @@ class Bluefox2 {
   void set_timeout_ms(int timeout_ms) { timeout_ms_ = timeout_ms; }
 
   int GetExposeUs() const;
+  int GetExposeStartUs() const;
 
   void OpenDevice();
   void RequestSingle() const;

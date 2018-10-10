@@ -17,9 +17,13 @@ class SingleNode : public camera_base::CameraNodeBase<Bluefox2DynConfig> {
 
   void AcquireOnce();
 
+  void SyncBaseTime(const double& hardware_time);
+
  private:
   boost::shared_ptr<Bluefox2Ros> bluefox2_ros_;
   bool boost_{false};
+  bool base_time_set_{false};
+  double offset_time_;
 };
 
 }  // namespace bluefox2

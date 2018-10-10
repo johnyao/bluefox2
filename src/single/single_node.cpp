@@ -10,10 +10,12 @@ SingleNode::SingleNode(const ros::NodeHandle& pnh)
 void SingleNode::Acquire() {
   while (is_acquire() && ros::ok()) {
     bluefox2_ros_->RequestSingle();
-    const auto expose_us = bluefox2_ros_->camera().GetExposeUs();
-    const auto expose_duration = ros::Duration(expose_us * 1e-6 / 2);
-    const auto time = ros::Time::now() + expose_duration;
-    bluefox2_ros_->PublishCamera(time);
+    double expose_duration = static_cast<double>(bluefox2_ros_->camera().GetExposeUs() * 1e-6 / 2);
+    double expose_start = static_cast<double>(bluefox2_ros_->camera().GetExposeStartUs() * 1e-6);
+    double hardware_cur_time = expose_start + expose_duration;
+    SyncBaseTime(hardware_cur_time);
+    ros::Time software_cur_time = ros::Time(hardware_cur_time + offset_time_);
+    bluefox2_ros_->PublishCamera(software_cur_time);
     Sleep();
   }
 }
@@ -21,16 +23,30 @@ void SingleNode::Acquire() {
 void SingleNode::AcquireOnce() {
   if (is_acquire() && ros::ok()) {
     bluefox2_ros_->RequestSingle();
-    const auto expose_us = bluefox2_ros_->camera().GetExposeUs();
-    const auto expose_duration = ros::Duration(expose_us * 1e-6 / 2);
-    const auto time = ros::Time::now() + expose_duration;
-    bluefox2_ros_->PublishCamera(time);
+    double expose_duration = static_cast<double>(bluefox2_ros_->camera().GetExposeUs() * 1e-6 / 2);
+    double expose_start = static_cast<double>(bluefox2_ros_->camera().GetExposeStartUs() * 1e-6);
+    double hardware_cur_time = expose_start + expose_duration;
+    SyncBaseTime(hardware_cur_time);
+    ros::Time software_cur_time = ros::Time(hardware_cur_time + offset_time_);
+    bluefox2_ros_->PublishCamera(software_cur_time);
   }
 }
 
 void SingleNode::Setup(Bluefox2DynConfig& config) {
   bluefox2_ros_->set_fps(config.fps);
   bluefox2_ros_->camera().Configure(config);
+}
+
+void SingleNode::SyncBaseTime(const double& hardware_time) {
+  if (base_time_set_)
+    return;
+  else {
+    // offset_time_ = software base time - hardware base time
+    offset_time_ = ros::Time::now().toSec() - hardware_time;
+    ROS_INFO("Initial Sync: \nhardware time = %f\nsoftware time = %f\noffset time = %f",
+             hardware_time, offset_time_ + hardware_time, offset_time_);
+    base_time_set_ = true;
+  }
 }
 
 }  // namepace bluefox2
