@@ -45,7 +45,8 @@ void SingleNode::SyncBaseTime(const double& hardware_time) {
     offset_time_ = ros::Time::now().toSec() - hardware_time;
     ROS_INFO("Initial Sync: \nhardware time = %f\nsoftware time = %f\noffset time = %f",
              hardware_time, offset_time_ + hardware_time, offset_time_);
-    base_time_set_ = true;
+    if (hardware_time > 0.0)
+      base_time_set_ = true;
   }
 }
 
