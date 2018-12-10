@@ -15,6 +15,9 @@ void SingleNode::Acquire() {
     double hardware_cur_time = expose_start + expose_duration;
     SyncBaseTime(hardware_cur_time);
     ros::Time software_cur_time = ros::Time(hardware_cur_time + offset_time_);
+    double dt = (ros::Time::now() - software_cur_time).toSec();
+    if (abs(dt) > 0.05)
+      ROS_WARN("ros::Time::now() - shifted hardware driver time = %f s", dt);
     bluefox2_ros_->PublishCamera(software_cur_time);
     Sleep();
   }
