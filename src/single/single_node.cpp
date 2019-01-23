@@ -5,7 +5,13 @@ namespace bluefox2 {
 
 SingleNode::SingleNode(const ros::NodeHandle& pnh)
     : CameraNodeBase(pnh),
-      bluefox2_ros_(boost::make_shared<Bluefox2Ros>(pnh)) {}
+      bluefox2_ros_(boost::make_shared<Bluefox2Ros>(pnh)),
+      tune_exposure_time_(-1.0), tune_interval_over_(true) {
+  if (pnh.getParam("tune_exposure_time", tune_exposure_time_)) {
+    tune_interval_over_ = false;
+    ROS_INFO("Enable auto-exposure for %f s after initialization, then disable it and freeze the exposure time", tune_exposure_time_);
+  }
+}
 
 void SingleNode::Acquire() {
   while (is_acquire() && ros::ok()) {
@@ -18,6 +24,12 @@ void SingleNode::Acquire() {
     double dt = (ros::Time::now() - software_cur_time).toSec();
     if (abs(dt) > 0.05)
       ROS_WARN("ros::Time::now() - shifted hardware driver time = %f s", dt);
+    if (!tune_interval_over_ && hardware_cur_time - init_hardware_time_ > tune_exposure_time_) {
+      int exptime = bluefox2_ros_->camera().GetExposeUs();
+      ROS_INFO("Disable auto-exposure, set expose us = %d", exptime);
+      tune_interval_over_ = true;
+      bluefox2_ros_->camera().SetOnlyAec(false);
+    }
     bluefox2_ros_->PublishCamera(software_cur_time);
     Sleep();
   }
@@ -50,6 +62,11 @@ void SingleNode::SyncBaseTime(const double& hardware_time) {
              hardware_time, offset_time_ + hardware_time, offset_time_);
     if (hardware_time > 0.0)
       base_time_set_ = true;
+    if (tune_exposure_time_ > 0.0) {
+      ROS_INFO("Enable auto-exposure temporarily");
+      init_hardware_time_ = hardware_time;
+      bluefox2_ros_->camera().SetOnlyAec(true);
+    }
   }
 }
 

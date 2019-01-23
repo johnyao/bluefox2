@@ -21,6 +21,9 @@ class Bluefox2 {
   int GetExposeUs() const;
   int GetExposeStartUs() const;
 
+  void SetOnlyAec(bool auto_expose) const;
+  void SetExposeUs(int expose_us) const;
+
   void OpenDevice();
   void RequestSingle() const;
   void Configure(Bluefox2DynConfig &config);

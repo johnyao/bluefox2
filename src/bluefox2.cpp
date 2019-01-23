@@ -60,6 +60,14 @@ namespace bluefox2 {
     }
   }
 
+  void Bluefox2::SetOnlyAec(bool auto_expose) const {
+    WriteProperty(cam_set_->autoExposeControl, auto_expose);
+  }
+
+  void Bluefox2::SetExposeUs(int expose_us) const {
+    WriteProperty(cam_set_->expose_us, expose_us);
+  }
+
   void Bluefox2::RequestSingle() const {
     int result = DMR_NO_ERROR;
     result = fi_->imageRequestSingle();

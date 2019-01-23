@@ -24,6 +24,9 @@ class SingleNode : public camera_base::CameraNodeBase<Bluefox2DynConfig> {
   bool boost_{false};
   bool base_time_set_{false};
   double offset_time_;
+  double tune_exposure_time_;
+  double init_hardware_time_;
+  bool tune_interval_over_;
 };
 
 }  // namespace bluefox2
