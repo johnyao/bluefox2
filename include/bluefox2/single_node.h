@@ -23,6 +23,7 @@ class SingleNode : public camera_base::CameraNodeBase<Bluefox2DynConfig> {
   boost::shared_ptr<Bluefox2Ros> bluefox2_ros_;
   bool boost_{false};
   bool base_time_set_{false};
+  bool use_embedded_time_;
   double offset_time_;
   double tune_exposure_time_;
   double init_hardware_time_;
