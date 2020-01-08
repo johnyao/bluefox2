@@ -7,12 +7,11 @@ SingleNode::SingleNode(const ros::NodeHandle& pnh)
     : CameraNodeBase(pnh),
       bluefox2_ros_(boost::make_shared<Bluefox2Ros>(pnh)),
       tune_exposure_time_(-1.0), tune_interval_over_(true) {
-  if (pnh.getParam("tune_exposure_time", tune_exposure_time_) &&
-      tune_exposure_time_ > 0.0) {
+  pnh.getParam("tune_exposure_time", tune_exposure_time_);
+  if (tune_exposure_time_ > 0.0) {
     tune_interval_over_ = false;
     ROS_INFO("Enable auto-exposure for %f s after initialization, then disable it and freeze the exposure time", tune_exposure_time_);
-  } else
-    ROS_INFO("Use constant exposure time.");
+  }
 }
 
 void SingleNode::Acquire() {
